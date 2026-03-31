@@ -25,16 +25,6 @@ const Navbar = () => {
                     alt="" 
                 />
 
-                {/* Resume Builder Link */}
-                <a
-                    href="https://resume-builder-full-stack-client-1pxl1bbf9.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 font-medium mx-5"
-                >
-                    Resume Builder
-                </a>
-
                 {
                     user ? (
                         <div className='flex items-center gap-3'>

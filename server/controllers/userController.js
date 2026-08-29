@@ -2,6 +2,7 @@ import Job from "../models/Job.js"
 import JobApplication from "../models/JobApplication.js"
 import User from "../models/User.js"
 import { v2 as cloudinary } from "cloudinary"
+import { clerkClient } from "@clerk/express"
 
 // Get User Data
 export const getUserData = async (req, res) => {
@@ -10,10 +11,20 @@ export const getUserData = async (req, res) => {
 
     try {
 
-        const user = await User.findById(userId)
+        let user = await User.findById(userId)
 
         if (!user) {
-            return res.json({ success: false, message: 'User Not Found' })
+            // Fetch user details from Clerk using Clerk API and auto-register in MongoDB
+            const clerkUser = await clerkClient.users.getUser(userId)
+            
+            const userData = {
+                _id: userId,
+                email: clerkUser.emailAddresses[0].emailAddress,
+                name: ((clerkUser.firstName || "") + " " + (clerkUser.lastName || "")).trim() || "User",
+                image: clerkUser.imageUrl,
+                resume: ''
+            }
+            user = await User.create(userData)
         }
 
         res.json({ success: true, user })
@@ -71,6 +82,7 @@ export const getUserJobApplications = async (req, res) => {
         const applications = await JobApplication.find({ userId })
             .populate('companyId', 'name email image')
             .populate('jobId', 'title description location category level salary')
+            .sort({ date: -1 })
             .exec()
 
         if (!applications) {
@@ -93,10 +105,23 @@ export const updateUserResume = async (req, res) => {
 
         const resumeFile = req.file
 
-        const userData = await User.findById(userId)
+        let userData = await User.findById(userId)
+
+        if (!userData) {
+            // Fetch user details from Clerk using Clerk API and auto-register in MongoDB
+            const clerkUser = await clerkClient.users.getUser(userId)
+            
+            userData = await User.create({
+                _id: userId,
+                email: clerkUser.emailAddresses[0].emailAddress,
+                name: ((clerkUser.firstName || "") + " " + (clerkUser.lastName || "")).trim() || "User",
+                image: clerkUser.imageUrl,
+                resume: ''
+            })
+        }
 
         if (resumeFile) {
-            const resumeUpload = await cloudinary.uploader.upload(resumeFile.path)
+            const resumeUpload = await cloudinary.uploader.upload(resumeFile.path, { resource_type: 'auto' })
             userData.resume = resumeUpload.secure_url
         }
 

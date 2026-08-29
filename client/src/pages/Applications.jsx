@@ -4,15 +4,16 @@ import { assets } from '../assets/assets'
 import moment from 'moment'
 import Footer from '../components/Footer'
 import { AppContext } from '../context/AppContext'
-import { useAuth, useUser } from '@clerk/clerk-react'
+import { useAuth, useUser, useClerk } from '@clerk/clerk-react'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import Loading from '../components/Loading'
 
 const Applications = () => {
 
-  const { user } = useUser()
+const { user, isLoaded } = useUser()
   const { getToken } = useAuth()
+  const { openSignIn } = useClerk()
 
   const [isEdit, setIsEdit] = useState(false)
   const [resume, setResume] = useState(null)
@@ -20,6 +21,10 @@ const Applications = () => {
   const { backendUrl, userData, userApplications, fetchUserData, fetchUserApplications } = useContext(AppContext)
 
   const updateResume = async () => {
+
+    if (!resume) {
+      return toast.error('Please select a resume file first')
+    }
 
     try {
 
@@ -54,7 +59,31 @@ const Applications = () => {
     }
   }, [user])
 
-  return userData ? (
+  if (!isLoaded) {
+    return <Loading />
+  }
+
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+        <div className='min-h-[70vh] flex flex-col items-center justify-center gap-4 text-center px-4'>
+          <h2 className='text-3xl font-semibold text-gray-700'>Access Denied</h2>
+          <p className='text-gray-500 max-w-md'>You must be signed in to view your job applications.</p>
+          <button onClick={() => openSignIn()} className='bg-blue-600 text-white px-6 py-2.5 rounded hover:bg-blue-700 transition'>
+            Login to Continue
+          </button>
+        </div>
+        <Footer />
+      </>
+    )
+  }
+
+  if (!userData) {
+    return <Loading />
+  }
+
+  return (
     <>
       <Navbar />
       <div className='container px-4 min-h-[65vh] 2xl:px-20 mx-auto my-10'>
@@ -92,7 +121,7 @@ const Applications = () => {
             </tr>
           </thead>
           <tbody>
-            {userApplications.map((job, index) => true ? (
+            {userApplications.filter(job => job.jobId && job.companyId).map((job, index) => (
               <tr key={index}>
                 <td className='py-3 px-4 flex items-center gap-2 border-b'>
                   <img className='w-8 h-8' src={job.companyId.image} alt="" />
@@ -107,13 +136,13 @@ const Applications = () => {
                   </span>
                 </td>
               </tr>
-            ) : (null))}
+            ))}
           </tbody>
         </table>
       </div>
       <Footer />
     </>
-  ) : <Loading />
+  )
 }
 
 export default Applications

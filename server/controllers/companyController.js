@@ -61,6 +61,10 @@ export const loginCompany = async (req, res) => {
 
         const company = await Company.findOne({ email })
 
+        if (!company) {
+            return res.json({ success: false, message: 'Invalid email or password' })
+        }
+
         if (await bcrypt.compare(password, company.password)) {
 
             res.json({
@@ -145,6 +149,7 @@ export const getCompanyJobApplicants = async (req, res) => {
         const applications = await JobApplication.find({ companyId })
             .populate('userId', 'name image resume')
             .populate('jobId', 'title location category level salary')
+            .sort({ date: -1 })
             .exec()
 
         return res.json({ success: true, applications })

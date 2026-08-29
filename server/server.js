@@ -24,6 +24,23 @@ app.use(cors())
 app.use(express.json())
 app.use(clerkMiddleware())
 
+// Custom Request/Response Logger for debugging
+app.use((req, res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.path} - User: ${req.auth?.userId || 'Guest'}`);
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log(`   Body:`, JSON.stringify(req.body));
+  }
+  
+  const oldJson = res.json;
+  res.json = function(data) {
+    console.log(`[RESPONSE] ${req.method} ${req.path} - Success: ${data.success}, Message: ${data.message || 'No message'}`);
+    return oldJson.apply(res, arguments);
+  };
+  
+  next();
+})
+
+
 // Routes
 app.get('/', (req, res) => res.send("API Working"))
 app.get("/debug-sentry", function mainHandler(req, res) {

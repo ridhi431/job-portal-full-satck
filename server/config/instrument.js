@@ -1,9 +1,11 @@
 // Import with `import * as Sentry from "@sentry/node"` if you are using ESM
+import 'dotenv/config'
 import * as Sentry from "@sentry/node"
+import nodemon from 'nodemon';
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 
 Sentry.init({
-  dsn: "",
+  dsn: process.env.SENTRY_DSN,
   integrations: [
     nodeProfilingIntegration(),
     Sentry.mongooseIntegration()
@@ -13,15 +15,10 @@ Sentry.init({
 });
 // Manually call startProfiler and stopProfiler
 // to profile the code in between
-Sentry.profiler.startProfiler();
+// Sentry.profiler.startProfiler();
 
 // Starts a transaction that will also be profiled
-Sentry.startSpan({
-  name: "My First Transaction",
-}, () => {
-  // the code executing inside the transaction will be wrapped in a span and profiled
-});
 
 // Calls to stopProfiling are optional - if you don't stop the profiler, it will keep profiling
 // your application until the process exits or stopProfiling is called.
-Sentry.profiler.stopProfiler();
+// Sentry.profiler.stopProfiler();

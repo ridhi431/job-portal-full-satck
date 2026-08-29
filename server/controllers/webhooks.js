@@ -51,8 +51,7 @@ export const clerkWebhooks = async (req, res) => {
                 break;
             }
             default:
-                break;
-        }
+             return res.json({ success: true, message: 'Event ignored' });        }
 
     } catch (error) {
         res.json({ success: false, message: error.message })

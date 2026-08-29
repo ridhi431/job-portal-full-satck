@@ -28,7 +28,17 @@ const Navbar = () => {
                 {
                     user ? (
                         <div className='flex items-center gap-3'>
+                            <a 
+                                href="https://ai-resume-builder-three-omega.vercel.app" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className='text-gray-600 hover:text-blue-600'
+                            >
+                                Build Resume
+                            </a>
                             <Link to="/applications">Applied Jobs</Link>
+                            <p>|</p>
+                            <Link to="/profile">My Profile</Link>
                             <p>|</p>
                             <p className='max-sm:hidden'>
                                 Hi, {user.firstName + " " + user.lastName}

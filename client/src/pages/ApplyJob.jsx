@@ -22,13 +22,14 @@ const ApplyJob = () => {
 
   const [JobData, setJobData] = useState(null)
   const [isAlreadyApplied, setIsAlreadyApplied] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   const { jobs, backendUrl, userData, userApplications, fetchUserApplications } = useContext(AppContext)
 
   const fetchJob = async () => {
 
     try {
-
+      setIsLoading(true)
       const { data } = await axios.get(backendUrl + `/api/jobs/${id}`)
 
       if (data.success) {
@@ -39,6 +40,8 @@ const ApplyJob = () => {
 
     } catch (error) {
       toast.error(error.message)
+    } finally {
+      setIsLoading(false)
     }
 
   }
@@ -76,7 +79,7 @@ const ApplyJob = () => {
 
   const checkAlreadyApplied = () => {
 
-    const hasApplied = userApplications.some(item => item.jobId._id === JobData._id)
+    const hasApplied = userApplications.some(item => item.jobId?._id === JobData._id)
     setIsAlreadyApplied(hasApplied)
 
   }
@@ -91,7 +94,27 @@ const ApplyJob = () => {
     }
   }, [JobData, userApplications, id])
 
-  return JobData ? (
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (!JobData) {
+    return (
+      <>
+        <Navbar />
+        <div className='min-h-[70vh] flex flex-col items-center justify-center gap-4 text-center px-4'>
+          <h2 className='text-3xl font-semibold text-gray-700'>Job Not Found</h2>
+          <p className='text-gray-500 max-w-md'>The job you are looking for does not exist, has been deleted, or there was a server connection error.</p>
+          <button onClick={() => navigate('/')} className='bg-blue-600 text-white px-6 py-2.5 rounded hover:bg-blue-700 transition'>
+            Go Back Home
+          </button>
+        </div>
+        <Footer />
+      </>
+    )
+  }
+
+  return (
     <>
       <Navbar />
 
@@ -154,8 +177,6 @@ const ApplyJob = () => {
       </div>
       <Footer />
     </>
-  ) : (
-    <Loading />
   )
 }
 

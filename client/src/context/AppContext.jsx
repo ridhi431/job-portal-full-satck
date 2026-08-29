@@ -8,6 +8,7 @@ export const AppContext = createContext()
 export const AppContextProvider = (props) => {
 
     const backendUrl = import.meta.env.VITE_BACKEND_URL
+    console.log("AppContextProvider backendUrl:", backendUrl);
 
     const { user } = useUser()
     const { getToken } = useAuth()
@@ -32,16 +33,19 @@ export const AppContextProvider = (props) => {
     // Function to Fetch Jobs 
     const fetchJobs = async () => {
         try {
-
+            console.log("fetchJobs calling URL:", backendUrl + '/api/jobs');
             const { data } = await axios.get(backendUrl + '/api/jobs')
+            console.log("fetchJobs response data:", data);
 
             if (data.success) {
                 setJobs(data.jobs)
             } else {
+                console.error("fetchJobs success=false:", data.message);
                 toast.error(data.message)
             }
 
         } catch (error) {
+            console.error("fetchJobs catch error:", error);
             toast.error(error.message)
         }
     }
@@ -66,19 +70,23 @@ export const AppContextProvider = (props) => {
     // Function to Fetch User Data
     const fetchUserData = async () => {
         try {
-
+            console.log("fetchUserData calling URL:", backendUrl + '/api/users/user');
             const token = await getToken();
+            console.log("fetchUserData obtained auth token:", token ? "YES (length: " + token.length + ")" : "NO");
 
             const { data } = await axios.get(backendUrl + '/api/users/user',
                 { headers: { Authorization: `Bearer ${token}` } })
+            console.log("fetchUserData response data:", data);
 
             if (data.success) {
                 setUserData(data.user)
             } else {
+                console.error("fetchUserData success=false:", data.message);
                 toast.error(data.message)
             }
 
         } catch (error) {
+            console.error("fetchUserData catch error:", error);
             toast.error(error.message)
         }
     }
@@ -86,19 +94,23 @@ export const AppContextProvider = (props) => {
     // Function to Fetch User's Applied Applications
     const fetchUserApplications = async () => {
         try {
-
+            console.log("fetchUserApplications calling URL:", backendUrl + '/api/users/applications');
             const token = await getToken()
+            console.log("fetchUserApplications obtained auth token:", token ? "YES" : "NO");
 
             const { data } = await axios.get(backendUrl + '/api/users/applications',
                 { headers: { Authorization: `Bearer ${token}` } }
             )
+            console.log("fetchUserApplications response data:", data);
             if (data.success) {
                 setUserApplications(data.applications)
             } else {
+                console.error("fetchUserApplications success=false:", data.message);
                 toast.error(data.message)
             }
 
         } catch (error) {
+            console.error("fetchUserApplications catch error:", error);
             toast.error(error.message)
         }
     }

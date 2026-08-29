@@ -1,7 +1,6 @@
 // Import with `import * as Sentry from "@sentry/node"` if you are using ESM
 import 'dotenv/config'
 import * as Sentry from "@sentry/node"
-import nodemon from 'nodemon';
 import { nodeProfilingIntegration } from "@sentry/profiling-node";
 
 Sentry.init({

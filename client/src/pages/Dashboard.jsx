@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { AppContext } from '../context/AppContext'
+import ThemeToggle from '../components/ThemeToggle'
 
 const Dashboard = () => {
 
@@ -24,51 +25,89 @@ const Dashboard = () => {
     }, [companyData])
 
     return (
-        <div className='min-h-screen'>
+        <div className='min-h-screen bg-base-200'>
 
-            {/* Navbar for Recuriter Panel */}
-            <div className='shadow py-4'>
-                <div className='px-5 flex justify-between items-center'>
-                    <img onClick={e => navigate('/')} className='max-sm:w-32 cursor-pointer' src={assets.logo} alt="" />
-                    {companyData && (
-                        <div className='flex items-center gap-3'>
-                            <p className='max-sm:hidden'>Welcome, {companyData.name}</p>
-                            <div className='relative group'>
-                                <img className='w-8 border rounded-full' src={companyData.image} alt="" />
-                                <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded  pt-12'>
-                                    <ul className='list-none m-0 p-2 bg-white rounded-md border text-sm'>
-                                        <li onClick={logout} className='py-1 px-2 cursor-pointer pr-10'>Logout</li>
-                                    </ul>
+            {/* Navbar for Recruiter Panel */}
+            <div className='navbar bg-base-100 shadow-sm px-5'>
+                <div className='navbar-start'>
+                    <h1
+        onClick={() => navigate('/')}
+        className='cursor-pointer text-2xl sm:text-3xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity'
+    >
+        Job<span className='text-base-content'>Portal</span>
+    </h1>
+                </div>
+                
+                <ThemeToggle/>
+     
+                {companyData && (
+                    <div className='navbar-end gap-3'>
+                        <p className='max-sm:hidden text-sm text-base-content/70'>
+                            Welcome, <span className='font-medium text-base-content'>{companyData.name}</span>
+                        </p>
+
+                        <div className='dropdown dropdown-end'>
+                            <div tabIndex={0} role="button" className='btn btn-ghost btn-circle avatar'>
+                                <div className='w-9 rounded-full ring ring-primary/30 ring-offset-base-100 ring-offset-1'>
+                                    <img src={companyData.image} alt="profile" />
                                 </div>
                             </div>
+                            <ul tabIndex={0} className='menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-40 p-2 shadow-lg border border-base-300'>
+                                <li>
+                                    <a onClick={logout} className='text-error'>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
 
             <div className='flex items-start'>
 
-                {/* Left Sidebar with option to add job, manage jobs, view applications */}
-                <div className='inline-block min-h-screen border-r-2'>
-                    <ul className='flex flex-col items-start pt-5 text-gray-800'>
-                        <NavLink className={({ isActive }) => ` flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-blue-100 border-r-4 border-blue-500'}`} to={'/dashboard/add-job'}>
-                            <img className='min-w-4' src={assets.add_icon} alt="" />
-                            <p className='max-sm:hidden'>Add Job</p>
-                        </NavLink>
+                {/* Left Sidebar */}
+                <div className='min-h-[calc(100vh-4rem)] border-r border-base-300 bg-base-100'>
+                    <ul className='menu menu-vertical pt-5 w-full sm:w-56'>
+                        <li>
+                            <NavLink
+                                to={'/dashboard/add-job'}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 rounded-none sm:rounded-lg ${isActive ? 'active bg-primary/10 text-primary font-medium border-r-4 sm:border-r-0 border-primary' : ''}`
+                                }
+                            >
+                                <img className='min-w-4 w-4' src={assets.add_icon} alt="" />
+                                <span className='max-sm:hidden'>Add Job</span>
+                            </NavLink>
+                        </li>
 
-                        <NavLink className={({ isActive }) => ` flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-blue-100 border-r-4 border-blue-500'}`} to={'/dashboard/manage-jobs'}>
-                            <img className='min-w-4' src={assets.home_icon} alt="" />
-                            <p className='max-sm:hidden'>Manage Jobs</p>
-                        </NavLink>
+                        <li>
+                            <NavLink
+                                to={'/dashboard/manage-jobs'}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 rounded-none sm:rounded-lg ${isActive ? 'active bg-primary/10 text-primary font-medium border-r-4 sm:border-r-0 border-primary' : ''}`
+                                }
+                            >
+                                <img className='min-w-4 w-4' src={assets.home_icon} alt="" />
+                                <span className='max-sm:hidden'>Manage Jobs</span>
+                            </NavLink>
+                        </li>
 
-                        <NavLink className={({ isActive }) => ` flex items-center p-3 sm:px-6 gap-2 w-full hover:bg-gray-100 ${isActive && 'bg-blue-100 border-r-4 border-blue-500'}`} to={'/dashboard/view-applications'}>
-                            <img className='min-w-4' src={assets.person_tick_icon} alt="" />
-                            <p className='max-sm:hidden'>View Applications</p>
-                        </NavLink>
+                        <li>
+                            <NavLink
+                                to={'/dashboard/view-applications'}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 rounded-none sm:rounded-lg ${isActive ? 'active bg-primary/10 text-primary font-medium border-r-4 sm:border-r-0 border-primary' : ''}`
+                                }
+                            >
+                                <img className='min-w-4 w-4' src={assets.person_tick_icon} alt="" />
+                                <span className='max-sm:hidden'>View Applications</span>
+                            </NavLink>
+                        </li>
                     </ul>
                 </div>
 
-                <div className='flex-1 h-full p-2 sm:p-5'>
+                <div className='flex-1 p-2 sm:p-5'>
                     <Outlet />
                 </div>
 

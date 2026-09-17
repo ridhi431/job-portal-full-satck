@@ -70,13 +70,14 @@ export const AppContextProvider = (props) => {
     // Function to Fetch User Data
     const fetchUserData = async () => {
         try {
-            console.log("fetchUserData calling URL:", backendUrl + '/api/users/user');
             const token = await getToken();
-            console.log("fetchUserData obtained auth token:", token ? "YES (length: " + token.length + ")" : "NO");
+            if (!token) {
+                console.log("fetchUserData: No token available, skipping");
+                return;
+            }
 
             const { data } = await axios.get(backendUrl + '/api/users/user',
                 { headers: { Authorization: `Bearer ${token}` } })
-            console.log("fetchUserData response data:", data);
 
             if (data.success) {
                 setUserData(data.user)
@@ -86,22 +87,27 @@ export const AppContextProvider = (props) => {
             }
 
         } catch (error) {
-            console.error("fetchUserData catch error:", error);
-            toast.error(error.message)
+            if (error.response?.status === 401) {
+                console.log("fetchUserData: Unauthorized (401) - token may be expired");
+            } else {
+                console.error("fetchUserData error:", error.message);
+                toast.error(error.response?.data?.message || error.message)
+            }
         }
     }
 
     // Function to Fetch User's Applied Applications
     const fetchUserApplications = async () => {
         try {
-            console.log("fetchUserApplications calling URL:", backendUrl + '/api/users/applications');
             const token = await getToken()
-            console.log("fetchUserApplications obtained auth token:", token ? "YES" : "NO");
+            if (!token) {
+                console.log("fetchUserApplications: No token available, skipping");
+                return;
+            }
 
             const { data } = await axios.get(backendUrl + '/api/users/applications',
                 { headers: { Authorization: `Bearer ${token}` } }
             )
-            console.log("fetchUserApplications response data:", data);
             if (data.success) {
                 setUserApplications(data.applications)
             } else {
@@ -110,8 +116,12 @@ export const AppContextProvider = (props) => {
             }
 
         } catch (error) {
-            console.error("fetchUserApplications catch error:", error);
-            toast.error(error.message)
+            if (error.response?.status === 401) {
+                console.log("fetchUserApplications: Unauthorized (401) - token may be expired");
+            } else {
+                console.error("fetchUserApplications error:", error.message);
+                toast.error(error.response?.data?.message || error.message)
+            }
         }
     }
 

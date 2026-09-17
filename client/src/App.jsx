@@ -14,11 +14,12 @@ import 'quill/dist/quill.snow.css'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 const App = () => {
   const { showRecruiterLogin } = useContext(AppContext);
 
   return (
-    <div>
+    <div className="min-h-screen bg-base-100 text-base-content transition-colors duration-200">
       <ToastContainer />
       {showRecruiterLogin && <RecruiterLogin />}
 

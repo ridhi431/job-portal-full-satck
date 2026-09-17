@@ -69,7 +69,8 @@ export const assets = {
     lock_icon,
     samsung_logo,
     adobe_logo,
-    amazon_logo
+    amazon_logo,
+    // hero_bg,
 }
 
 export const JobCategories = [

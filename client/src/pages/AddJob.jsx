@@ -48,7 +48,7 @@ const AddJob = () => {
 
 
     useEffect(() => {
-        // Initiate Qill only once
+        // Initiate Quill only once
         if (!quillRef.current && editorRef.current) {
             quillRef.current = new Quill(editorRef.current, {
                 theme: 'snow',
@@ -57,29 +57,34 @@ const AddJob = () => {
     }, [])
 
     return (
-        <form onSubmit={onSubmitHandler} className='container p-4 flex flex-col w-full items-start gap-3'>
+        <form onSubmit={onSubmitHandler} className='container p-4 sm:p-6 flex flex-col w-full items-start gap-4'>
 
             <div className='w-full'>
-                <p className='mb-2'>Job Title</p>
-                <input type="text" placeholder='Type here'
-                    onChange={e => setTitle(e.target.value)} value={title}
+                <label className='block mb-2 font-medium text-base-content'>Job Title</label>
+                <input
+                    type="text"
+                    placeholder='Type here'
+                    onChange={e => setTitle(e.target.value)}
+                    value={title}
                     required
-                    className='w-full max-w-lg px-3 py-2 border-2 border-gray-300 rounded'
+                    className='input input-bordered w-full max-w-lg'
                 />
             </div>
 
             <div className='w-full max-w-lg'>
-                <p className='my-2'>Job Description</p>
-                <div ref={editorRef}>
-
+                <p className='mb-2 font-medium text-base-content'>Job Description</p>
+                <div ref={editorRef} className='bg-base-100 rounded-lg border border-base-300 overflow-hidden'>
                 </div>
             </div>
 
-            <div className='flex flex-col sm:flex-row gap-2 w-full sm:gap-8'>
+            <div className='flex flex-col sm:flex-row gap-4 w-full sm:gap-8'>
 
                 <div>
-                    <p className='mb-2'>Job Category</p>
-                    <select className='w-full px-3 py-2 border-2 border-gray-300 rounded' onChange={e => setCategory(e.target.value)}>
+                    <label className='block mb-2 font-medium text-base-content'>Job Category</label>
+                    <select
+                        className='select select-bordered w-full'
+                        onChange={e => setCategory(e.target.value)}
+                    >
                         {JobCategories.map((category, index) => (
                             <option key={index} value={category}>{category}</option>
                         ))}
@@ -87,8 +92,11 @@ const AddJob = () => {
                 </div>
 
                 <div>
-                    <p className='mb-2'>Job Location</p>
-                    <select className='w-full px-3 py-2 border-2 border-gray-300 rounded' onChange={e => setLocation(e.target.value)}>
+                    <label className='block mb-2 font-medium text-base-content'>Job Location</label>
+                    <select
+                        className='select select-bordered w-full'
+                        onChange={e => setLocation(e.target.value)}
+                    >
                         {JobLocations.map((location, index) => (
                             <option key={index} value={location}>{location}</option>
                         ))}
@@ -96,8 +104,11 @@ const AddJob = () => {
                 </div>
 
                 <div>
-                    <p className='mb-2'>Job Level</p>
-                    <select className='w-full px-3 py-2 border-2 border-gray-300 rounded' onChange={e => setLevel(e.target.value)}>
+                    <label className='block mb-2 font-medium text-base-content'>Job Level</label>
+                    <select
+                        className='select select-bordered w-full'
+                        onChange={e => setLevel(e.target.value)}
+                    >
                         <option value="Beginner level">Beginner level</option>
                         <option value="Intermediate level">Intermediate level</option>
                         <option value="Senior level">Senior level</option>
@@ -105,12 +116,21 @@ const AddJob = () => {
                 </div>
 
             </div>
+
             <div>
-                <p className='mb-2'>Job Salary</p>
-                <input min={0} className='w-full px-3 py-2 border-2 border-gray-300 rounded sm:w-[120px]' onChange={e => setSalary(e.target.value)} type="Number" placeholder='2500' />
+                <label className='block mb-2 font-medium text-base-content'>Job Salary</label>
+                <input
+                    min={0}
+                    className='input input-bordered sm:w-[140px]'
+                    onChange={e => setSalary(e.target.value)}
+                    type="number"
+                    placeholder='2500'
+                />
             </div>
 
-            <button className='w-28 py-3 mt-4 bg-black text-white rounded'>ADD</button>
+            <button type="submit" className='btn btn-primary w-28 mt-4 rounded-full'>
+                ADD
+            </button>
         </form>
     )
 }

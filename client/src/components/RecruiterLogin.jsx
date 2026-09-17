@@ -80,8 +80,8 @@ const RecruiterLogin = () => {
     }, [])
 
     return (
-        <div className='modal modal-open'>
-            <div className='modal-box max-w-sm p-10'>
+        <div className='modal modal-open px-4'>
+            <div className='modal-box max-w-sm p-6 sm:p-10'>
 
                 <form onSubmit={onSubmitHandler} className='relative text-base-content/70'>
                     <h1 className='text-center text-2xl text-base-content font-medium'>Recruiter {state}</h1>

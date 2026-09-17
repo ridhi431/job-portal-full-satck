@@ -120,11 +120,11 @@ const Applications = () => {
             isEdit || userData && userData.resume === ""
               ? <>
                 <label className='flex items-center cursor-pointer' htmlFor="resumeUpload">
-                  <span className='btn btn-soft btn-primary mr-2'>{resume ? resume.name : "Select Resume"}</span>
+                  <span className='btn btn-soft btn-primary mr-2 max-w-[170px] sm:max-w-xs truncate'>{resume ? resume.name : "Select Resume"}</span>
                   <input id='resumeUpload' onChange={e => setResume(e.target.files[0])} accept='application/pdf' type="file" hidden />
                   <img src={assets.profile_upload_icon} alt="" />
                 </label>
-                <button onClick={updateResume} className='btn btn-success btn-soft'>Save</button>
+                <button onClick={updateResume} className='btn btn-success btn-soft shrink-0'>Save</button>
               </>
               : <div className='flex gap-2'>
                 <a target='_blank' href={userData.resume} className='btn btn-soft btn-primary'>

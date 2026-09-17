@@ -4,8 +4,8 @@ const Footer = () => {
     const navigate = useNavigate()
 
     return (
-        <footer className='footer container px-4 2xl:px-20 mx-auto items-center py-3 mt-20'>
-            <div className='flex-1 flex items-center gap-4'>
+        <footer className='flex flex-col sm:flex-row items-center justify-between gap-4 container px-4 2xl:px-20 mx-auto py-6 mt-16 border-t border-base-200'>
+            <div className='flex items-center gap-4 text-center sm:text-left'>
                 <h1
                     onClick={() => navigate('/')}
                     className='cursor-pointer text-xl sm:text-2xl font-extrabold tracking-tight hover:opacity-80 transition-opacity'

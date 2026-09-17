@@ -16,20 +16,20 @@ const Navbar = () => {
     const { setShowRecruiterLogin } = useContext(AppContext)
 
     return (
-        <div className='navbar bg-base-100 shadow-sm px-4 2xl:px-20'>
+        <div className='navbar bg-base-100 shadow-sm px-3 sm:px-6 2xl:px-20 relative z-50'>
 
             {/* Logo - navbar-start */}
-      <div className='navbar-start'>
-   <h1
-  onClick={() => navigate('/')}
-  className='ml-20 cursor-pointer text-2xl sm:text-4xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity'
->
-  Job<span className='text-base-content'>Portal</span>
-</h1>
-</div>
+            <div className='navbar-start w-auto flex-1'>
+                <h1
+                    onClick={() => navigate('/')}
+                    className='cursor-pointer text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-primary hover:opacity-80 transition-opacity'
+                >
+                    Job<span className='text-base-content'>Portal</span>
+                </h1>
+            </div>
 
             {/* Right side - navbar-end */}
-            <div className='navbar-end'>
+            <div className='navbar-end w-auto gap-1 sm:gap-2'>
                 {
                     user ? (
                         <>
@@ -140,17 +140,17 @@ const Navbar = () => {
 </div>
                         </>
                     ) : (
-                        <div className='flex items-center gap-2 sm:gap-4'>
+                        <div className='flex items-center gap-1.5 sm:gap-3'>
                             <button
                                 onClick={() => setShowRecruiterLogin(true)}
-                                className='btn btn-ghost btn-xs sm:btn-sm whitespace-nowrap'
+                                className='btn btn-ghost btn-xs sm:btn-sm whitespace-nowrap px-2 sm:px-3 text-xs sm:text-sm'
                             >
                                 Recruiter Login
                             </button>
 
                             <button
                                 onClick={() => openSignIn()}
-                                className='btn btn-primary btn-xs sm:btn-sm rounded-full px-4 sm:px-9'
+                                className='btn btn-primary btn-xs sm:btn-sm rounded-full px-3 sm:px-6 text-xs sm:text-sm'
                             >
                                 Login
                             </button>

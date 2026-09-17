@@ -99,7 +99,12 @@ export const AppContextProvider = (props) => {
     // Function to Fetch User's Applied Applications
     const fetchUserApplications = async () => {
         try {
-            const token = await getToken()
+            let token = await getToken()
+            if (!token) {
+                // Short wait to allow Clerk session to sync if just initialized
+                await new Promise(res => setTimeout(res, 500))
+                token = await getToken()
+            }
             if (!token) {
                 console.log("fetchUserApplications: No token available, skipping");
                 return;
@@ -149,6 +154,9 @@ export const AppContextProvider = (props) => {
         if (user) {
             fetchUserData()
             fetchUserApplications()
+        } else {
+            setUserData(null)
+            setUserApplications([])
         }
     }, [user])
 

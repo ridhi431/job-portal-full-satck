@@ -30,6 +30,7 @@ const ApplyJob = () => {
     backendUrl,
     userData,
     userApplications,
+    setUserApplications,
     fetchUserData,
     fetchUserApplications
   } = useContext(AppContext)
@@ -120,7 +121,21 @@ const ApplyJob = () => {
       if (data.success) {
         toast.success(data.message)
         setIsAlreadyApplied(true)
-        fetchUserApplications()
+        if (setUserApplications) {
+          setUserApplications(prev => [
+            ...prev,
+            {
+              _id: Date.now().toString(),
+              jobId: JobData,
+              companyId: JobData.companyId,
+              date: Date.now(),
+              status: 'Pending'
+            }
+          ])
+        }
+        if (fetchUserApplications) {
+          await fetchUserApplications()
+        }
       } else {
         toast.error(data.message)
       }
@@ -132,10 +147,10 @@ const ApplyJob = () => {
 
   // Check if already applied
   const checkAlreadyApplied = () => {
-    if (!JobData) return
+    if (!JobData || !Array.isArray(userApplications)) return
 
     const hasApplied = userApplications.some(
-      item => (item.jobId?._id || item.jobId) === JobData._id
+      item => String(item?.jobId?._id || item?.jobId || '') === String(JobData._id)
     )
 
     setIsAlreadyApplied(hasApplied)
@@ -143,7 +158,10 @@ const ApplyJob = () => {
 
   useEffect(() => {
     fetchJob()
-  }, [id])
+    if (user && (!userApplications || userApplications.length === 0) && fetchUserApplications) {
+      fetchUserApplications()
+    }
+  }, [id, user])
 
   useEffect(() => {
     if (JobData) {
@@ -200,16 +218,16 @@ const ApplyJob = () => {
 
   // More jobs from the same company
   const appliedJobsIds = new Set(
-    userApplications.map(app => app.jobId?._id || app.jobId)
+    (userApplications || []).map(app => String(app?.jobId?._id || app?.jobId || ''))
   )
 
   const moreJobs = jobs
     .filter(job =>
-      job._id !== JobData._id &&
-      (job.companyId?._id || job.companyId) ===
-      (JobData.companyId?._id || JobData.companyId)
+      String(job._id) !== String(JobData._id) &&
+      String(job.companyId?._id || job.companyId) ===
+      String(JobData.companyId?._id || JobData.companyId)
     )
-    .filter(job => !appliedJobsIds.has(job._id))
+    .filter(job => !appliedJobsIds.has(String(job._id)))
     .slice(0, 4)
 
   return (

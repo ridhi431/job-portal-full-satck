@@ -4,6 +4,7 @@ import { v2 as cloudinary } from 'cloudinary'
 import generateToken from "../utils/generateToken.js";
 import Job from "../models/Job.js";
 import JobApplication from "../models/JobApplication.js";
+import User from "../models/User.js";
 
 // Register a new company
 export const registerCompany = async (req, res) => {

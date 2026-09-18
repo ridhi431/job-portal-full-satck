@@ -35,14 +35,6 @@ const Navbar = () => {
                         <>
                             {/* Desktop view - full links, hidden on small screens */}
                             <div className='hidden lg:flex items-center gap-3'>
-                                <a
-                                    href="https://ai-resume-builder-three-omega.vercel.app"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className='link link-hover text-sm whitespace-nowrap'
-                                >
-                                    Build Resume
-                                </a>
                                 <Link to="/applications" className='link link-hover text-sm whitespace-nowrap'>
                                     Applied Jobs
                                 </Link>
@@ -91,17 +83,6 @@ const Navbar = () => {
 
       <li className="menu-title">
         Hi, {user?.firstName}
-      </li>
-
-      <li>
-        <a
-          href="https://ai-resume-builder-three-omega.vercel.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          Build Resume
-        </a>
       </li>
 
       <li>
